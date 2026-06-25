@@ -29,7 +29,7 @@ async function shell(procName, argsArray = []) {
   }
 }
 
-// Clones and augments the manifest.json that we use for Chrome with the keys needed for Firefox.
+// Clones and augments the manifest.json5 that we use for Chrome with the keys needed for Firefox.
 function createFirefoxManifest(manifest) {
   manifest = JSON.parse(JSON.stringify(manifest)); // Deep clone.
 
@@ -88,7 +88,7 @@ async function parseManifestFile() {
   // Chrome's manifest.json supports JavaScript comment syntax. However, the Chrome Store rejects
   // manifests with JavaScript comments in them! So here we use the JSON5 library, rather than JSON
   // library, to parse our manifest.json and remove its comments.
-  return JSON5.parse(await Deno.readTextFile("./manifest.json"));
+  return JSON5.parse(await Deno.readTextFile("./manifest.json5"));
 }
 
 async function checkForCommonBuildIssues() {
@@ -123,7 +123,7 @@ async function checkFilesFromManifestArePresent(manifest) {
   }
 
   if (missing.length > 0) {
-    const msg = "These files are referenced in manifest.json but missing from the build:\n" +
+    const msg = "These files are referenced in manifest.json5 but missing from the build:\n" +
       missing.map((f) => `  ${f}`).join("\n");
     throw new Error(msg);
   }
@@ -174,7 +174,7 @@ function getPathsFromManifest(manifest) {
   }
 
   if (files.some((f) => f == null)) {
-    throw new Error("manifest.json is missing a path that was expected by getPathsFromManifest");
+    throw new Error("manifest.json5 is missing a path that was expected by getPathsFromManifest");
   }
   // Remove duplicates.
   return Array.from(new Set(files)).sort();

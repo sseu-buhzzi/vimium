@@ -62,12 +62,12 @@ globalThis.chrome = {
   _manifest: null,
 
   _loadManifest: async function () {
-    this._manifest = JSON5.parse(await Deno.readTextFile("./manifest.json"));
+    this._manifest = JSON5.parse(await Deno.readTextFile("./manifest.json5"));
   },
 
   _getManifest: function () {
     if (!this._manifest) {
-      throw new Error("manifest.json has not yet been read.");
+      throw new Error("manifest.json5 has not yet been read.");
     }
     return this._manifest;
   },

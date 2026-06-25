@@ -92,7 +92,7 @@ Vimium is written in Javascript. To install Vimium from source:
 
 **On Firefox:**
 
-Firefox needs a modified version of the manifest.json that's used for Chrome. To generate this, run
+Firefox needs a modified version of the manifest.json5 that's used for Chrome. To generate this, run
 
 `./make.js write-firefox-manifest`
 
