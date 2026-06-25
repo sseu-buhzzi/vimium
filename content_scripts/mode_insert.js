@@ -66,9 +66,18 @@ class InsertMode extends Mode {
 
     super.init(Object.assign(defaults, options));
 
-    // Only for tests. This gives us a hook to test the status of the permanently-installed
-    // instance.
     if (this.permanent) {
+      this.push({
+        indicator: () => {
+          if (!Settings.get("hideHud") && this.isActive()) {
+            HUD.show("Input focused");
+            return this.passEventToPage;
+          }
+          return this.continueBubbling;
+        },
+      });
+      // Only for tests. This gives us a hook to test the status of the permanently-installed
+      // instance.
       InsertMode.permanentInstance = this;
     }
   }
