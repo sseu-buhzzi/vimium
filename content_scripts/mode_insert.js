@@ -75,6 +75,8 @@ class InsertMode extends Mode {
           }
           return this.continueBubbling;
         },
+        focus: () => this.alwaysContinueBubbling(() => Mode.setIndicator()),
+        blur: () => this.alwaysContinueBubbling(() => Mode.setIndicator()),
       });
       // Only for tests. This gives us a hook to test the status of the permanently-installed
       // instance.
