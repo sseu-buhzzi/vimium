@@ -4,13 +4,7 @@
 import * as fs from "@std/fs";
 import * as path from "@std/path";
 import { abort, desc, run, task } from "https://deno.land/x/drake@v1.5.1/mod.ts";
-import puppeteer from "npm:puppeteer";
-// We use a vendored version of shoulda, rather than jsr:@philc/shoulda, because shoulda.js is used
-// in dom_tests.js which is loaded by Puppeteer, which doesn't have access to Deno's module system.
-import * as shoulda from "./tests/vendor/shoulda.js";
 import JSON5 from "npm:json5";
-import { DOMParser } from "@b-fuze/deno-dom";
-import * as fileServer from "@std/http/file-server";
 
 const projectPath = new URL(".", import.meta.url).pathname;
 
@@ -258,6 +252,8 @@ async function buildStorePackage() {
 
 async function runUnitTests() {
   // Import every test file.
+  const shoulda = await import("./tests/vendor/shoulda.js");
+
   const dir = path.join(projectPath, "tests/unit_tests");
   const files = Array.from(Deno.readDirSync(dir)).map((f) => f.name).sort();
   for (let f of files) {
@@ -321,6 +317,8 @@ async function runPuppeteerTest(page, url) {
 
 desc("Download and parse list of top-level domains (TLDs)");
 task("fetch-tlds", [], async () => {
+  const { DOMParser } = await import("@b-fuze/deno-dom");
+
   const suffixListUrl = "https://www.iana.org/domains/root/db";
   const response = await fetch(suffixListUrl);
   const text = await response.text();
@@ -373,6 +371,9 @@ function getAvailablePort() {
 }
 
 async function testDom() {
+  const puppeteer = await import("npm:puppeteer");
+  const fileServer = await import("@std/http/file-server");
+
   const port = getAvailablePort();
   let served404 = false;
   const httpServer = Deno.serve({ port }, async (req) => {
@@ -430,7 +431,7 @@ desc("Run unit and DOM tests");
 task("test", ["test-unit", "test-dom"]);
 
 desc("Builds a zip file for submission to the Chrome and Firefox stores. The output is in dist/");
-task("package", ["write-command-listing"], async () => {
+task("package", [], async () => {
   await buildStorePackage();
 });
 

@@ -1,0 +1,7 @@
+{
+  "imports": {
+    "@std/fs": "jsr:@std/fs@^1.0.8",
+    "@std/path": "jsr:@std/path@^1.0.8",
+    "json5": "npm:json5@^2.2.3"
+  }
+}
